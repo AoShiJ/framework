@@ -1,7 +1,6 @@
 package nacos
 
 import (
-	"github.com/AoShiJ/framework/config"
 	"github.com/astaxie/beego/logs"
 	"github.com/nacos-group/nacos-sdk-go/clients"
 	"github.com/nacos-group/nacos-sdk-go/common/constant"
@@ -19,8 +18,8 @@ func ClientConfig() (error, string) {
 	}
 	serverConfigs := []constant.ServerConfig{
 		{
-			IpAddr: config.N.Ip,
-			Port:   uint64(config.N.Port),
+			IpAddr: "192.168.127.9",
+			Port:   8848,
 		},
 	}
 	cc, err := clients.NewConfigClient(
@@ -34,7 +33,7 @@ func ClientConfig() (error, string) {
 		return err, ""
 	}
 	content, err := cc.GetConfig(vo.ConfigParam{
-		DataId: config.N.DataId,
-		Group:  config.N.Group})
+		DataId: "sss",
+		Group:  "DEFAULT_GROUP"})
 	return nil, content
 }
