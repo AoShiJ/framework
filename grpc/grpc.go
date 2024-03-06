@@ -8,9 +8,9 @@ import (
 	"net"
 )
 
-func RegisterGrpc(port *int, fc func(s *grpc.Server)) {
+func RegisterGrpc(port string, fc func(s *grpc.Server)) {
 
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", *port))
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%s", port))
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
