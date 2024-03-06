@@ -25,7 +25,7 @@ var D Dial
 var J JwtConf
 
 func init() {
-	viper.SetConfigFile("/Users/jiangshiao/go/src/zg5/zg5-week2/week2/rpc/config/test.yaml")
+	viper.SetConfigFile("/Users/jiangshiao/go/src/zg5/work/framework/config/test.yaml")
 	err := viper.ReadInConfig()
 	if err != nil {
 		logs.Info(err, "viper")
