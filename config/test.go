@@ -24,8 +24,8 @@ var N NaCosConf
 var D Dial
 var J JwtConf
 
-func init() {
-	viper.SetConfigFile("/Users/jiangshiao/go/src/zg5/work/framework/config/test.yaml")
+func InitYaml() {
+	viper.SetConfigFile("./test.yaml")
 	err := viper.ReadInConfig()
 	if err != nil {
 		logs.Info(err, "viper")
