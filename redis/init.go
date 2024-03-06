@@ -2,8 +2,8 @@ package redis
 
 import (
 	"fmt"
+	"github.com/AoShiJ/framework/mysql"
 	"github.com/go-redis/redis"
-	"week2/rpc/work/mysql"
 )
 
 var Red *redis.Client

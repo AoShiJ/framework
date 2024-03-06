@@ -1,11 +1,11 @@
 package nacos
 
 import (
+	"github.com/AoShiJ/framework/config"
 	"github.com/astaxie/beego/logs"
 	"github.com/nacos-group/nacos-sdk-go/clients"
 	"github.com/nacos-group/nacos-sdk-go/common/constant"
 	"github.com/nacos-group/nacos-sdk-go/vo"
-	"week2/rpc/config"
 )
 
 func ClientConfig() (error, string) {

@@ -1,10 +1,10 @@
 package app
 
 import (
+	"github.com/AoShiJ/framework/mysql"
+	"github.com/AoShiJ/framework/nacos"
+	"github.com/AoShiJ/framework/redis"
 	"github.com/astaxie/beego/logs"
-	"week2/rpc/work/mysql"
-	"week2/rpc/work/nacos"
-	"week2/rpc/work/redis"
 )
 
 func Init(s ...string) error {

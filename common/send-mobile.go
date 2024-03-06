@@ -2,11 +2,11 @@ package common
 
 import (
 	"fmt"
+	"github.com/AoShiJ/framework/redis"
 	"github.com/cloopen/go-sms-sdk/cloopen"
 	"log"
 	"math/rand"
 	"time"
-	"week2/rpc/work/redis"
 )
 
 func SendMobile(mobile string) {
