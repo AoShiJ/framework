@@ -18,7 +18,7 @@ func ClientConfig() (error, string) {
 	}
 	serverConfigs := []constant.ServerConfig{
 		{
-			IpAddr: "192.168.127.9",
+			IpAddr: "10.2.171.80",
 			Port:   8848,
 		},
 	}

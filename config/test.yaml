@@ -1,10 +1,10 @@
 NaCos:
-  Ip: 192.168.127.9
+  Ip: 10.2.171.80
   Port: 8848
   DataId: sss
   Group: DEFAULT_GROUP
 Dial:
-  Host: 192.168.127.9
+  Host: 10.2.171.80
   Port: 8080
 Jwt:
   password: 123123
