@@ -12,7 +12,7 @@ import (
 	"strconv"
 )
 
-func RegisterGrpc(port string, fc func(s *grpc.Server)) {
+func RegisterGrpc(port, ip, serverName string, fc func(s *grpc.Server)) {
 
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%s", port))
 	if err != nil {
@@ -25,7 +25,7 @@ func RegisterGrpc(port string, fc func(s *grpc.Server)) {
 		return
 	}
 
-	consul.RegisterConsul(int64(atoi), "10.2.171.80", "sss")
+	consul.RegisterConsul(int64(atoi), ip, serverName)
 	grpc_health_v1.RegisterHealthServer(s, health.NewServer())
 	fc(s)
 	log.Printf("server listening at %v", lis.Addr())
