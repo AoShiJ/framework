@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/AoShiJ/framework/redis"
+	"github.com/astaxie/beego/logs"
 	"github.com/google/uuid"
 	"github.com/hashicorp/consul/api"
 	"strconv"
@@ -74,6 +75,8 @@ func AgentHealthService(ctx context.Context, serviceName string) (string, error)
 		return "", err
 	}
 	sr, infos, err := client.Agent().AgentHealthServiceByName(serviceName)
+	logs.Info(sr)
+	logs.Info(infos, 123123)
 	if err != nil {
 		return "", err
 	}
@@ -85,6 +88,7 @@ func AgentHealthService(ctx context.Context, serviceName string) (string, error)
 	if err != nil {
 		return "", err
 	}
-
+	logs.Info(index, "-------------index")
+	logs.Info(fmt.Sprintf("%v:%v", infos[index].Service.Address, infos[index].Service.Port), "---------infos")
 	return fmt.Sprintf("%v:%v", infos[index].Service.Address, infos[index].Service.Port), nil
 }
