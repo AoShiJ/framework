@@ -7,7 +7,7 @@ import (
 	"github.com/nacos-group/nacos-sdk-go/vo"
 )
 
-func ClientConfig() (error, string) {
+func ClientConfig(ip string, port int64) (error, string) {
 	clientConfig := constant.ClientConfig{
 		NamespaceId:         "", // 如果需要支持多namespace，我们可以场景多个client,它们有不同的NamespaceId。当namespace是public时，此处填空字符串。
 		TimeoutMs:           5000,
@@ -18,8 +18,8 @@ func ClientConfig() (error, string) {
 	}
 	serverConfigs := []constant.ServerConfig{
 		{
-			IpAddr: "10.2.171.80",
-			Port:   8848,
+			IpAddr: ip,
+			Port:   uint64(port),
 		},
 	}
 	cc, err := clients.NewConfigClient(
