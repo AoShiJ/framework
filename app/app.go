@@ -6,9 +6,9 @@ import (
 	"github.com/astaxie/beego/logs"
 )
 
-func Init(s ...string) error {
+func Init(ip string, port int64, s ...string) error {
 	var err error
-	err, nacos := nacos.ClientConfig()
+	err, nacos := nacos.ClientConfig(ip, port)
 	if err != nil {
 		logs.Info(err, "nacos")
 		return err
