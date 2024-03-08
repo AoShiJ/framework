@@ -4,12 +4,15 @@ import (
 	"context"
 	"fmt"
 	"github.com/AoShiJ/framework/consul"
+	"github.com/astaxie/beego/logs"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )
 
 func Client(ctx context.Context, toService string) (*grpc.ClientConn, error) {
 	conn, err := consul.AgentHealthService(ctx, toService)
+	logs.Info(conn, 123)
+	logs.Info(toService, 321)
 	if err != nil {
 		return nil, err
 	}
