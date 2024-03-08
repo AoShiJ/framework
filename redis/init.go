@@ -27,7 +27,7 @@ func withClint(serviceName string, hand func(cli *redis.Client) error) error {
 	//cfg := rediscfg.Redis
 
 	cli := redis.NewClient(&redis.Options{
-		Addr: fmt.Sprintf("%s:%d", "10.2.171.80", 6379),
+		Addr: fmt.Sprintf("%s:%d", "192.168.127.9", 6379),
 		DB:   0,
 	})
 	defer cli.Close()
