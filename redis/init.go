@@ -39,7 +39,6 @@ func withClint(serviceName string, hand func(cli *redis.Client) error) error {
 
 	return nil
 }
-
 func GetByKey(ctx context.Context, serviceName, key string) (string, error) {
 	var data string
 	var err error
