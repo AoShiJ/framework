@@ -1,36 +1,74 @@
 package consul
 
 import (
-	"context"
 	"fmt"
-	"github.com/AoShiJ/framework/redis"
 	"github.com/astaxie/beego/logs"
 	"github.com/google/uuid"
 	"github.com/hashicorp/consul/api"
-	"strconv"
-	"time"
+	"net"
 )
 
-const CONSUL_KEY = "consul:node:index"
+const Consul_Key = "consul_index"
 
-func RegisterConsul(port int64, address, name string) error {
+type Con struct {
+	Consul struct {
+		Ip   string `json:"Ip"`
+		Port string `json:"Port"`
+	} `json:"Consul"`
+}
 
-	c, err := api.NewClient(api.DefaultConfig())
+//	func getConfig(servername string) (*Con, error) {
+//		s := new(Con)
+//		config, err := GetConfig(servername, "DEFAULT_GROUP")
+//		if err != nil {
+//			return nil, err
+//		}
+//		json.Unmarshal([]byte(config), &s)
+//		return s, err
+//	}
+func GetIp() (ip []string) {
+	addrs, err := net.InterfaceAddrs()
+	if err != nil {
+		return ip
+	}
+	for _, addr := range addrs {
+		ipNet, isVailIpNet := addr.(*net.IPNet)
+		if isVailIpNet && !ipNet.IP.IsLoopback() {
+			if ipNet.IP.To4() != nil {
+				ip = append(ip, ipNet.IP.String())
+			}
+		}
+
+	}
+	return ip
+}
+
+func RegisterConsul(servername string, IP string, port int) error {
+	//config, err := getConfig(servername)
+	//if err != nil {
+	//	return err
+	//}
+	//fmt.Println(config.Consul.Ip, config.Consul.Port, 2342423423424324)
+
+	client, err := api.NewClient(&api.Config{
+		Address: fmt.Sprintf("%v:%v", IP, "8500"),
+	})
 	if err != nil {
 		return err
 	}
-
-	err = c.Agent().ServiceRegister(&api.AgentServiceRegistration{
-		ID:      uuid.New().String(),
-		Name:    name,
-		Tags:    []string{"GRPC"},
-		Port:    int(port),
-		Address: address,
+	ip := GetIp()
+	logs.Info(client)
+	logs.Info(ip[0])
+	err = client.Agent().ServiceRegister(&api.AgentServiceRegistration{
+		ID:      uuid.NewString(),
+		Name:    servername,
+		Tags:    []string{"Grpc"},
+		Port:    port,
+		Address: ip[0],
 		Check: &api.AgentServiceCheck{
-			Interval:                       "5s",                                //间隔时常
-			Timeout:                        "5s",                                //退出
-			GRPC:                           fmt.Sprintf("%v:%v", address, port), //
-			DeregisterCriticalServiceAfter: "30s",                               //注销
+			Interval:                       "5s",
+			GRPC:                           fmt.Sprintf("%v:%v", ip[0], port),
+			DeregisterCriticalServiceAfter: "10s",
 		},
 	})
 	if err != nil {
@@ -38,57 +76,27 @@ func RegisterConsul(port int64, address, name string) error {
 	}
 	return nil
 }
-func getIndex(ctx context.Context, serviceName string, indexLen int) (int, error) {
-	exist, err := redis.ExistKey(ctx, serviceName, CONSUL_KEY)
-	if err != nil {
-		return 0, err
-	}
 
-	if exist {
-		indexStr, err := redis.GetByKey(ctx, serviceName, CONSUL_KEY)
-		if err != nil {
-			return 0, err
-		}
-		index, err := strconv.Atoi(indexStr)
-		newIndex := index + 1
-
-		if newIndex >= indexLen {
-			newIndex = 0
-		}
-		err = redis.SetKey(ctx, serviceName, CONSUL_KEY, newIndex, time.Duration(0))
-		if err != nil {
-			return 0, err
-		}
-
-		return index, nil
-	}
-
-	err = redis.SetKey(ctx, serviceName, CONSUL_KEY, 0, time.Duration(0))
-	if err != nil {
-		return 0, err
-	}
-	return 0, nil
-}
-func AgentHealthService(ctx context.Context, serviceName string) (string, error) {
-	client, err := api.NewClient(api.DefaultConfig())
+func AgentHealthService(servername string, IP string, port int) (string, error) {
+	//config, err := getConfig(servername)
+	//if err != nil {
+	//	return "", err
+	//}
+	client, err := api.NewClient(&api.Config{
+		Address: fmt.Sprintf("%v:%v", IP, port),
+	})
 	if err != nil {
 		return "", err
 	}
-	sr, infos, err := client.Agent().AgentHealthServiceByName(serviceName)
-	logs.Info(sr)
-	logs.Info(infos, 123123)
+	name, i, err := client.Agent().AgentHealthServiceByName(servername)
 	if err != nil {
 		return "", err
 	}
-	if sr != "passing" {
-		return "", fmt.Errorf("is not have health service")
+	if name != "passing" {
+		return "", fmt.Errorf("is not health service")
 	}
-
-	index, err := getIndex(ctx, serviceName, len(infos))
 	if err != nil {
 		return "", err
 	}
-	logs.Info(index, "-------------index")
-	logs.Info(fmt.Sprintf("%v:%v", infos[index].Service.Address, infos[index].Service.Port), "---------infos")
-	return fmt.Sprintf("%v:%v", infos[index].Service.Address, infos[index].Service.Port), nil
+	return fmt.Sprintf("%v:%v", i[0].Service.Address, i[0].Service.Port), nil
 }
