@@ -9,6 +9,8 @@ import (
 func Init(ip string, port int64, s ...string) error {
 	var err error
 	err, nacos := nacos.ClientConfig(ip, port)
+	logs.Info(nacos)
+	logs.Info(ip, port)
 	if err != nil {
 		logs.Info(err, "nacos")
 		return err
