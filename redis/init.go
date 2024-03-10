@@ -9,10 +9,11 @@ import (
 )
 
 func withClint(serviceName string, hand func(cli *redis.Client) error) error {
-	//content, err := config.GetConfig("DEFAULT_GROUP", serviceName)
+	//content, err := config.GetConfig("DEFAULT_GROUP","sss")
 	//if err != nil {
 	//	return err
 	//}
+	//nacos.ClientConfig()
 	//type RedisConfig struct {
 	//	Host string `json:"host" yaml:"host"`
 	//	Port int    `json:"port" yaml:"port"`
